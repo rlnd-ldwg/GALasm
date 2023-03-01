@@ -136,7 +136,15 @@ struct  GAL_OLMC        OLMC[12];
 
 UBYTE   *fbuff;
 
-
+int isMyalpha(int argument)
+{
+    if (isalpha(argument))
+        return 1;
+    else if (argument == '_')
+        return 1;
+    else
+        return 0;
+}
 
 /******************************************************************************
 ** int AssemblePldFile(char *file)
@@ -299,7 +307,7 @@ int AssemblePldFile(char *file, struct Config *cfg)
                     chr = *actptr;
 
                     for (m = 0; m < 8; m++)
-                    Jedec.GALSig[n*8 + m] = (chr >> (7 - m)) & 0x1;
+                    Jedec.GALSig[n*8 + (7-m)] = (chr >> (7 - m)) & 0x1;
 
                     actptr++;                   /* increment pointer and */
                     n++;                        /* character-counter     */
@@ -348,7 +356,7 @@ int AssemblePldFile(char *file, struct Config *cfg)
                 else
                     max_chr = 9;
 
-                if (!(isalpha(chr) || isdigit(chr) || IsNEG(chr)))
+                if (!(isMyalpha(chr) || isdigit(chr) || IsNEG(chr)))
                 {
                     AsmError(5, 0);             /* is character a legal */
                     return(-1);                 /* one?                 */
@@ -356,7 +364,7 @@ int AssemblePldFile(char *file, struct Config *cfg)
 
                 k = 0;
 
-                while (isalpha(chr) || isdigit(chr) || IsNEG(chr))
+                while (isMyalpha(chr) || isdigit(chr) || IsNEG(chr))
                 {
                     if (IsNEG(chr) && k != 0)    /* check position of '/' */
                     {
@@ -368,7 +376,7 @@ int AssemblePldFile(char *file, struct Config *cfg)
 
                     actptr++;
 
-                    if (IsNEG(chr) && (!(isalpha(*actptr) || isdigit(*actptr))))
+                    if (IsNEG(chr) && (!(isMyalpha(*actptr) || isdigit(*actptr))))
                     {
                         AsmError(3, 0);
                         return(-1);
@@ -741,7 +749,7 @@ loop1:
 
 
             n = 0;
-            while (isalpha(*actptr))            /* copy suffix string into */
+            while (isMyalpha(*actptr))            /* copy suffix string into */
             {                                   /* suffix array            */
                 if (n < MAX_SUFFIX_SIZE)
                     suffix_strn[n++] = *actptr++;
@@ -1656,7 +1664,7 @@ void IsPinName(UBYTE *pinnames, int numofpins)
 
     oldactptr = actptr;
 
-    while (isalpha(*actptr) || isdigit(*actptr))
+    while (isMyalpha(*actptr) || isdigit(*actptr))
     {
         actptr++;
         n++;
@@ -1720,7 +1728,7 @@ void Is_AR_SP(UBYTE *ptr)
 
     oldptr = ptr;
 
-    while (isalpha(*ptr) || isdigit(*ptr))
+    while (isMyalpha(*ptr) || isdigit(*ptr))
     {
         ptr++;
         n++;
@@ -2349,7 +2357,7 @@ int main(int argc, char *argv[])
 			"Original sources Copyright (c) 1991-96 Christian Habermann\n\n");
 
 
-  	while(argc > 1 && (p[0] == '-' || (isalpha(p[1]) && (argc != 2)))) 
+  	while(argc > 1 && (p[0] == '-' || (isMyalpha(p[1]) && (argc != 2)))) 
 	{
     	switch(p[1]) 
 		{
@@ -2411,7 +2419,7 @@ int main(int argc, char *argv[])
     	}
 		
 
-		if(!isalpha(p[2]))
+		if(!isMyalpha(p[2]))
 		{
 	    	argc--;
     		argv++;
